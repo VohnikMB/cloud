@@ -1,14 +1,19 @@
 const AWS = require("aws-sdk");
 const dynamodb = new AWS.DynamoDB({
-  region: "<YOUR_AWS_REGION_CODE>",
+  region: process.env.AWS_REGION,
   apiVersion: "2012-08-10"
 });
 
 exports.handler = (event, context, callback) => {
   const params = {
+    Key: {
+      id: {
+        S: event.id
+      }
+    },
     TableName: process.env.TABLE_NAME
   };
-  dynamodb.scan(params, (err, data) => {
+  dynamodb.deleteItem(params, (err, data) => {
     if (err) {
       console.log(err);
       callback(err);

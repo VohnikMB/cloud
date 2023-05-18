@@ -4,11 +4,9 @@ module "label" {
   
   name       = var.name
   context    = var.context
-  
- 
 }
 
-resource "aws_dynamodb_table" "example_masniak" {
+resource "aws_dynamodb_table" "this" {
   name             = module.label.id
   hash_key         = "id"
   billing_mode     = "PAY_PER_REQUEST"

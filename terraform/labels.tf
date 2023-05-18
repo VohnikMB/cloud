@@ -7,13 +7,11 @@ module "label" {
   label_order = var.label_order
   environment = var.environment
   
- # name       = "bastion"
- #attributes = ["public"]
- #delimiter  = "-"
+}
+module "label_api" {
+  source   = "cloudposse/label/null"
+  version = "0.25.0"
 
- #tags = {
- # "BusinessUnit" = "XYZ",
- #  "Snapshot"     = "true"
- #  }
-
+  name = "api"
+  context = module.label.context
 }
