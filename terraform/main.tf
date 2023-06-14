@@ -1,45 +1,44 @@
-module "course" {
-    source = "./modules/dynamodb/eu-central-1"
-    context = module.label.context
-    name = "course"
+module "db_authors_table" {
+  source = "./modules/dynamodb"
+
+  name    = "Authors"
+  context = module.name.context
+
 }
 
-module "author" {
-    source = "./modules/dynamodb/eu-central-1"
-    context = module.label.context
-    name = "author"
+module "db_courses_table" {
+  source = "./modules/dynamodb"
+
+  name    = "Courses"
+  context = module.name.context
 }
 
 module "lambda" {
- source = "./modules/lambda/eu-central-1"
- context = module.label.context
- 
- name = "authors"
- name_courses = "courses"
-
-
-  table_courses_name = module.course.table_name
-  table_courses_arn = module.course.table_arn
-
-  table_author_name = module.author.table_name
-  table_author_arn = module.author.table_arn
-
+  source                  = "./modules/lambda"
+  context                 = module.name.context
+  name                    = "Authors"
+  name_courses            = "Courses"
+  name_courses_save       = "Courses-save"
+  name_courses_get        = "Courses-get"
+  name_courses_delete     = "Courses-delete"
+  name_courses_update     = "Courses-update"
+  table_author_name       = module.db_authors_table.table_name
+  table_author_arn        = module.db_authors_table.table_arn
+  table_courses_name      = module.db_courses_table.table_name
+  table_courses_arn       = module.db_courses_table.table_arn
   lambda_courses_role_arn = module.iam.table_courses_role_arn
-
-  name_get_course = "get-course"
-  name_save_course = "save-course"
-  name_update_course = "update-course"
-  name_delete_course = "delete-course"
-
+  lambda_authors_role_arn = module.iam.table_authors_role_arn
 }
-module "iam" {
-    source = "./modules/iam/eu-central-1"
-    context = module.label.context
-    name = "iam"
-    table_author_arn = module.author.table_arn
-    table_courses_arn = module.course.table_arn
-}
+
 resource "aws_iam_user" "the-accounts" {
-  for_each = toset(["Todd","James","Adam","Dottie"])
-  name = "${module.label.id}-${each.key}"
+  for_each = toset(["Todd", "James", "Alice", "Dottie"])
+  name     = "${module.name.id}-${each.key}"
+}
+
+module "iam" {
+  source            = "./modules/iam"
+  context           = module.name.context
+  name              = "iam"
+  table_authors_arn = module.db_authors_table.table_arn
+  table_courses_arn = module.db_courses_table.table_arn
 }

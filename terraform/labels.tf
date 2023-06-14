@@ -1,17 +1,16 @@
-module "label" {
-  source   = "cloudposse/label/null"
+module "name" {
+  source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  namespace  = var.namespace
-  stage      = var.stage
-  label_order = var.label_order
+  namespace   = var.namespace
   environment = var.environment
-  
+  delimiter   = var.delimiter
 }
+
 module "label_api" {
-  source   = "cloudposse/label/null"
+  source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name = "api"
-  context = module.label.context
+  name    = "api"
+  context = module.name.context
 }
