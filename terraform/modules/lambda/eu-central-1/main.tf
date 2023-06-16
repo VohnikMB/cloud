@@ -10,7 +10,6 @@ module "lambda" {
     environment_variables = {
       TABLE_NAME = var.table_author_name
     }
-
     attach_policy_statements = true
     policy_statements = {
     dynamodb = {
@@ -32,8 +31,7 @@ module "lambda_courses" {
   handler = "index.handler"
   runtime = "nodejs12.x"
   source_path = "${path.module}/lambda_src/get_all_courses_lambda/index.js"
-  
-  environment_variables = {
+    environment_variables = {
     TABLE_NAME = var.table_courses_name
   }
 
@@ -78,7 +76,6 @@ module "lambda_save_course" {
     environment_variables = {
       TABLE_NAME = var.table_courses_name  
     }
-
     create_role = false
     lambda_role = var.lambda_courses_role_arn 
     tags        = module.label_save_course.tags 
@@ -96,7 +93,6 @@ module "lambda_update_course" {
     environment_variables = {
       TABLE_NAME = var.table_courses_name  
     }
-
     create_role = false
     lambda_role = var.lambda_courses_role_arn 
     tags        = module.label_update_course.tags
@@ -114,7 +110,6 @@ module "lambda_delete_course" {
     environment_variables = {
       TABLE_NAME = var.table_courses_name  
     }
-
     create_role = false
     lambda_role = var.lambda_courses_role_arn 
     tags        = module.label_delete_course.tags 

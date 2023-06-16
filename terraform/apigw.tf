@@ -1,7 +1,5 @@
 resource "aws_api_gateway_rest_api" "this" {
-
   name = module.label_api.id
-
   endpoint_configuration {
     types = ["REGIONAL"]
   }
